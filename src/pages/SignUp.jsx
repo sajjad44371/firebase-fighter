@@ -1,10 +1,39 @@
 import { Eye, EyeClosed } from "lucide-react";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Link } from "react-router";
+import { showToast } from "../utils/toast";
+import { AuthContext } from "../context/AuthContext";
 
 const SignUp = () => {
+  const { createUser } = use(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const handleSignUp = (event) => {
+    event.preventDefault();
+    // const name = event.target.name?.value;
+    const email = event.target.email?.value;
+    const password = event.target.password?.value;
+    const confirmPassword = event.target.confirmPassword?.value;
+
+    if (password !== confirmPassword) {
+      showToast.error("Password Doesn't match");
+      return;
+    }
+
+    createUser(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) {
+          showToast.success("User created successfully");
+          console.log(user)
+        }
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        showToast.error(errorMessage);
+      });
+  };
 
   return (
     <>
@@ -58,7 +87,7 @@ const SignUp = () => {
           </div>
 
           {/* Form */}
-          <form className="space-y-3.5">
+          <form onSubmit={handleSignUp} className="space-y-3.5">
             {/* Full Name Field */}
             <div className="form-control">
               <label className="label pb-1">
@@ -69,6 +98,7 @@ const SignUp = () => {
               <div className="relative">
                 <input
                   type="text"
+                  name="name"
                   placeholder="John Doe"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-secondary pl-11 text-sm font-medium transition-all"
                   required
@@ -101,6 +131,7 @@ const SignUp = () => {
               <div className="relative">
                 <input
                   type="email"
+                  name="email"
                   placeholder="name@example.com"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-secondary pl-11 text-sm font-medium transition-all"
                   required
@@ -134,6 +165,7 @@ const SignUp = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
+                  name="password"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-secondary pl-11 pr-11 text-sm font-medium transition-all"
                   required
                 />
@@ -175,6 +207,7 @@ const SignUp = () => {
               <div className="relative">
                 <input
                   type="password"
+                  name="confirmPassword"
                   placeholder="••••••••"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-secondary pl-11 pr-11 text-sm font-medium transition-all"
                   required

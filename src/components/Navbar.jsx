@@ -84,12 +84,6 @@ const Navbar = () => {
       {/* Auth / Avatar Section */}
       <div className="navbar-end gap-2">
         <Link
-          to="/sign-in"
-          className="btn btn-ghost btn-sm hidden sm:inline-flex"
-        >
-          Sign In
-        </Link>
-        <Link
           to="/sign-up"
           className="btn btn-primary btn-sm rounded-full px-5"
         >
