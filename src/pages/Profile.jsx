@@ -1,10 +1,14 @@
+import { use } from "react";
+import { AuthContext } from "../context/AuthContext";
+
 const Profile = () => {
+  const { user } = use(AuthContext);
   return (
     <>
       {/* Cover & Profile Header Card */}
       <div className="card bg-base-100 border border-base-content/10 shadow-xl overflow-hidden rounded-3xl">
         {/* Vibrant Mesh Gradient Cover */}
-        <div className="h-44 sm:h-56 bg-gradient-to-r from-primary via-accent to-secondary relative overflow-hidden">
+        <div className="h-44 sm:h-56 bg-linear-to-r from-primary via-accent to-secondary relative overflow-hidden">
           <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]"></div>
           <div className="absolute top-4 right-4 bg-base-100/30 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-semibold tracking-wide border border-white/20">
             PRO MEMBER ✨
@@ -34,7 +38,7 @@ const Profile = () => {
               <div className="space-y-1">
                 <div className="flex items-center justify-center sm:justify-start gap-2">
                   <h1 className="text-2xl sm:text-3xl font-black text-base-content">
-                    Alex Rivera
+                    {user?.displayName}
                   </h1>
                   <span className="badge badge-primary badge-sm font-semibold">
                     Verified
@@ -157,7 +161,7 @@ const Profile = () => {
               </label>
               <input
                 type="email"
-                defaultValue="alex.rivera@example.com"
+                defaultValue={user?.email}
                 className="input input-bordered rounded-2xl bg-base-200/50"
                 disabled
               />

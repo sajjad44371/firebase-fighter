@@ -1,9 +1,34 @@
 import { Eye, EyeClosed } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router";
+import { use, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+import { showToast } from "../utils/toast";
 
 const SignIn = () => {
+  const { signIn } = use(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSignIn = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const email = form.email.value.trim();
+    const password = form.password.value;
+
+    signIn(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) {
+          showToast.success("Successfully sign in");
+          form.reset();
+          navigate(location.state || "/");
+        }
+      })
+      .catch((error) => {
+        showToast.error(error.message);
+      });
+  };
 
   return (
     <>
@@ -58,7 +83,7 @@ const SignIn = () => {
           </div>
 
           {/* Form */}
-          <form className="space-y-4">
+          <form onSubmit={handleSignIn} className="space-y-4">
             {/* Email Field */}
             <div className="form-control">
               <label className="label pb-1">
@@ -69,6 +94,7 @@ const SignIn = () => {
               <div className="relative">
                 <input
                   type="email"
+                  name="email"
                   placeholder="name@example.com"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-primary pl-11 text-sm font-medium transition-all"
                   required
@@ -101,6 +127,7 @@ const SignIn = () => {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
+                  name="password"
                   placeholder="••••••••"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-primary pl-11 pr-11 text-sm font-medium transition-all"
                   required
