@@ -1,6 +1,10 @@
+import { Eye, EyeClosed } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 
 const SignIn = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <>
       {/* Glassmorphic Container */}
@@ -96,7 +100,7 @@ const SignIn = () => {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-primary pl-11 pr-11 text-sm font-medium transition-all"
                   required
@@ -120,10 +124,11 @@ const SignIn = () => {
                 {/* Password Toggle Button */}
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-base-content/50 hover:text-primary transition-colors rounded-xl"
-                  title="Show password"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-base-content/50 hover:text-primary transition-colors rounded-xl cursor-pointer"
+                  title={showPassword ? "Hide password" : "Show password"}
                 >
-                  Show
+                  {showPassword ? <EyeClosed></EyeClosed> : <Eye></Eye>}
                 </button>
               </div>
             </div>

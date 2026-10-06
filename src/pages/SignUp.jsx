@@ -1,6 +1,11 @@
+import { Eye, EyeClosed } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
   return (
     <>
       <div className="relative w-full max-w-md mx-auto card backdrop-blur-xl bg-base-100/70 border border-base-content/10 shadow-2xl rounded-3xl overflow-hidden my-8">
@@ -127,7 +132,7 @@ const SignUp = () => {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-secondary pl-11 pr-11 text-sm font-medium transition-all"
                   required
@@ -151,10 +156,11 @@ const SignUp = () => {
                 {/* Password Toggle Button */}
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-base-content/50 hover:text-secondary transition-colors rounded-xl"
-                  title="Show password"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-base-content/50 hover:text-secondary transition-colors rounded-xl cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                  title={showPassword ? "Hide password" : "Show password"}
                 >
-                  Show
+                  {showPassword ? <EyeClosed></EyeClosed> : <Eye></Eye>}
                 </button>
               </div>
             </div>
@@ -188,14 +194,6 @@ const SignUp = () => {
                     />
                   </svg>
                 </span>
-
-                {/* Confirm Password Toggle Button */}
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-base-content/50 hover:text-secondary transition-colors rounded-xl"
-                >
-                  Show
-                </button>
               </div>
             </div>
 
@@ -205,6 +203,8 @@ const SignUp = () => {
                 <input
                   type="checkbox"
                   className="checkbox checkbox-secondary checkbox-xs rounded-md"
+                  checked={isChecked}
+                  onChange={(e) => setIsChecked(e.target.checked)}
                   required
                 />
                 <span className="label-text text-xs text-base-content/70">
@@ -229,7 +229,8 @@ const SignUp = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-secondary rounded-2xl w-full h-12 shadow-lg shadow-secondary/25 hover:shadow-secondary/40 font-bold text-sm tracking-wide mt-2"
+              disabled={!isChecked}
+              className={`btn btn-secondary rounded-2xl w-full h-12 shadow-lg shadow-secondary/25 hover:shadow-secondary/40 font-bold text-sm tracking-wide mt-2 ${isChecked ? "hover:bg-pink-600 text-white cursor-pointer" : "cursor-not-allowed"}`}
             >
               Get Started Free
             </button>
