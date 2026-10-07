@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { showToast } from "../utils/toast";
 
 const SignIn = () => {
-  const { signIn } = use(AuthContext);
+  const { signIn, signInWithGoogle } = use(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,6 +30,21 @@ const SignIn = () => {
       });
   };
 
+  // google sign in
+  const handleGoogleSignIn = (event) => {
+    event.preventDefault();
+    signInWithGoogle()
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) {
+          showToast.success("Successfully sign in with google");
+        }
+      })
+      .catch((error) => {
+        showToast(error.message);
+      });
+  };
+
   return (
     <>
       {/* Glassmorphic Container */}
@@ -51,6 +66,7 @@ const SignIn = () => {
           {/* Google Login Button */}
           <button
             type="button"
+            onClick={handleGoogleSignIn}
             className="btn btn-outline border-base-content/15 hover:border-primary bg-base-100/80 hover:bg-base-200 text-base-content font-medium rounded-2xl w-full h-12 shadow-sm transition-all duration-200 flex items-center justify-center gap-3 group"
           >
             <svg

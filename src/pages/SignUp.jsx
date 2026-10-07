@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import PasswordChecker from "../components/PasswordChecker";
 
 const SignUp = () => {
-  const { createUser } = use(AuthContext);
+  const { createUser, signInWithGoogle } = use(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -56,6 +56,21 @@ const SignUp = () => {
     }
   };
 
+  // sign in with google
+  const handleGoogleSignIn = (event) => {
+    event.preventDefault();
+    signInWithGoogle()
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) {
+          showToast.success("Successfully sign in with google");
+        }
+      })
+      .catch((error) => {
+        showToast(error.message);
+      });
+  };
+
   return (
     <div className="relative w-full max-w-md mx-auto card backdrop-blur-xl bg-base-100/70 border border-base-content/10 shadow-2xl rounded-3xl overflow-hidden my-8">
       <div className="card-body p-8 sm:p-10">
@@ -75,9 +90,8 @@ const SignUp = () => {
 
         <button
           type="button"
-          disabled
-          className="btn btn-outline border-base-content/15 bg-base-100/80 text-base-content font-medium rounded-2xl w-full h-12 shadow-sm flex items-center justify-center gap-3 opacity-70 cursor-not-allowed"
-          title="Google authentication is not configured yet"
+          onClick={handleGoogleSignIn}
+          className="btn btn-outline border-base-content/15 hover:border-primary bg-base-100/80 hover:bg-base-200 text-base-content font-medium rounded-2xl w-full h-12 shadow-sm transition-all duration-200 flex items-center justify-center gap-3 group"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
             <path
