@@ -12,6 +12,8 @@ const SignUp = () => {
     updateUserProfile,
     emailVerification,
     setLoading,
+    signOutUser,
+    setUser,
   } = use(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +63,10 @@ const SignUp = () => {
             // email verification
             emailVerification(userCredential?.user)
               .then(() => {
+                signOutUser().then(() => {
+                  setLoading(true);
+                  setUser(null);
+                });
                 showToast.success(
                   "User created successfully and sent email verification link",
                 );

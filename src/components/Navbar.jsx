@@ -2,7 +2,7 @@ import { use } from "react";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 import { showToast } from "../utils/toast";
-import Loader from "./Loader";
+
 import { RingLoader } from "react-spinners";
 
 const Navbar = () => {
