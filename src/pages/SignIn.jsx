@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { showToast } from "../utils/toast";
 
 const SignIn = () => {
-  const { signIn, signInWithGoogle } = use(AuthContext);
+  const { signIn, signInWithGoogle, setLoading } = use(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ const SignIn = () => {
             showToast.success("Successfully sign in");
             form.reset();
             navigate(location.state || "/");
+            setLoading(false);
           } else {
             showToast.error(
               "Your email is not verified. Please check your mailbox",
@@ -44,6 +45,7 @@ const SignIn = () => {
         const user = userCredential.user;
         if (user) {
           showToast.success("Successfully sign in with google");
+          setLoading(false);
         }
       })
       .catch((error) => {

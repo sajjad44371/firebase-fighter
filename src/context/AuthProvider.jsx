@@ -20,26 +20,31 @@ const AuthProvider = ({ children }) => {
 
   // create user with email and password
   const createUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   // update user profile
   const updateUserProfile = (user, info) => {
+    setLoading(true);
     return updateProfile(user, info);
   };
 
   // email verification
   const emailVerification = (user) => {
+    setLoading(true);
     return sendEmailVerification(user);
   };
 
   // sign in user
   const signIn = (email, password) => {
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   // sign in with google
   const signInWithGoogle = () => {
+    setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
@@ -49,6 +54,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         console.log("user:", currentUser);
         setUser(currentUser);
+        setLoading(false);
       }
     });
     return () => unsubscribe();
@@ -56,6 +62,7 @@ const AuthProvider = ({ children }) => {
 
   // sign out user
   const signOutUser = () => {
+    setLoading(true);
     return signOut(auth);
   };
 
@@ -68,6 +75,8 @@ const AuthProvider = ({ children }) => {
     user,
     setUser,
     signOutUser,
+    loading,
+    setLoading,
   };
 
   return (

@@ -6,8 +6,13 @@ import { AuthContext } from "../context/AuthContext";
 import PasswordChecker from "../components/PasswordChecker";
 
 const SignUp = () => {
-  const { createUser, signInWithGoogle, updateUserProfile, emailVerification } =
-    use(AuthContext);
+  const {
+    createUser,
+    signInWithGoogle,
+    updateUserProfile,
+    emailVerification,
+    setLoading,
+  } = use(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -62,6 +67,7 @@ const SignUp = () => {
                 form.reset();
                 setCheckPassword("");
                 setConfirmPassword("");
+                setLoading(false);
               })
               .catch((error) => {
                 showToast.error(error.message);
@@ -86,6 +92,7 @@ const SignUp = () => {
         const user = userCredential.user;
         if (user) {
           showToast.success("Successfully sign in with google");
+          setLoading(false);
         }
       })
       .catch((error) => {

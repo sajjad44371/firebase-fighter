@@ -2,13 +2,16 @@ import { use } from "react";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 import { showToast } from "../utils/toast";
+import Loader from "./Loader";
+import { RingLoader } from "react-spinners";
 
 const Navbar = () => {
-  const { user, signOutUser, setUser } = use(AuthContext);
+  const { user, signOutUser, setUser, loading, setLoading } = use(AuthContext);
 
   const handleLogOut = () => {
     signOutUser()
       .then(() => {
+        setLoading(false);
         setUser(null);
         showToast.success("Successfully sign out");
       })
@@ -107,40 +110,47 @@ const Navbar = () => {
         </Link>
 
         {/* Logged in state Avatar Placeholder (Demo) */}
-        {user && (
-          <div className="dropdown dropdown-end ml-2">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar border border-primary"
-            >
-              <div className="w-9 rounded-full">
-                <img
-                  alt="User Avatar"
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                />
+        {loading ? (
+          // <Loader text="Profile Loading..."></Loader>
+          <>
+            <RingLoader color="teal" size={40}></RingLoader>
+          </>
+        ) : (
+          user && (
+            <div className="dropdown dropdown-end ml-2">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar border border-primary"
+              >
+                <div className="w-9 rounded-full">
+                  <img
+                    alt="User Avatar"
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                  />
+                </div>
               </div>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow-xl bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <Link to="/profile" className="justify-between">
+                    Profile{" "}
+                    <span className="badge badge-primary badge-sm">New</span>
+                  </Link>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li>
+                  <a onClick={handleLogOut} className="text-error">
+                    Logout
+                  </a>
+                </li>
+              </ul>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <Link to="/profile" className="justify-between">
-                  Profile{" "}
-                  <span className="badge badge-primary badge-sm">New</span>
-                </Link>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a onClick={handleLogOut} className="text-error">
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div>
+          )
         )}
       </div>
     </div>
