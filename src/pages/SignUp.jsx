@@ -6,7 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 import PasswordChecker from "../components/PasswordChecker";
 
 const SignUp = () => {
-  const { createUser, signInWithGoogle } = use(AuthContext);
+  const { createUser, signInWithGoogle, updateUserProfile, emailVerification } =
+    use(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,6 +26,8 @@ const SignUp = () => {
 
     const form = event.currentTarget;
     const email = form.email.value.trim();
+    const displayName = form.name.value.trim();
+    const photoURL = form.photo.value.trim();
 
     if (!isPasswordValid) {
       showToast.error(
@@ -44,10 +47,29 @@ const SignUp = () => {
       const userCredential = await createUser(email, checkPassword);
 
       if (userCredential?.user) {
-        showToast.success("User created successfully.");
-        form.reset();
-        setCheckPassword("");
-        setConfirmPassword("");
+        // update profile
+        updateUserProfile(userCredential?.user, {
+          displayName,
+          photoURL,
+        })
+          .then(() => {
+            // email verification
+            emailVerification(userCredential?.user)
+              .then(() => {
+                showToast.success(
+                  "User created successfully and sent email verification link",
+                );
+                form.reset();
+                setCheckPassword("");
+                setConfirmPassword("");
+              })
+              .catch((error) => {
+                showToast.error(error.message);
+              });
+          })
+          .catch((error) => {
+            showToast.error(error.message);
+          });
       }
     } catch (error) {
       showToast.error(error?.message || "Unable to create your account.");
@@ -120,6 +142,45 @@ const SignUp = () => {
         </div>
 
         <form onSubmit={handleSignUp} className="space-y-3.5">
+          {/* name  */}
+          <div className="form-control">
+            <label htmlFor="name" className="label pb-1">
+              <span className="label-text font-semibold text-xs uppercase tracking-wider text-base-content/70">
+                Name
+              </span>
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              name="name"
+              placeholder="Your name"
+              className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-secondary text-sm font-medium transition-all"
+              required
+              autoComplete="name"
+            />
+          </div>
+
+          {/* photo  */}
+          <div className="form-control">
+            <label htmlFor="photo" className="label pb-1">
+              <span className="label-text font-semibold text-xs uppercase tracking-wider text-base-content/70">
+                PhotoURL
+              </span>
+            </label>
+
+            <input
+              id="photo"
+              type="text"
+              name="photo"
+              placeholder="Provide your photo URL"
+              className="input input-bordered w-full rounded-2xl bg-base-100/80 focus:bg-base-100 border-base-content/15 focus:border-secondary text-sm font-medium transition-all"
+              required
+              autoComplete="photo"
+            />
+          </div>
+
+          {/* email  */}
           <div className="form-control">
             <label htmlFor="email" className="label pb-1">
               <span className="label-text font-semibold text-xs uppercase tracking-wider text-base-content/70">

@@ -20,9 +20,15 @@ const SignIn = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         if (user) {
-          showToast.success("Successfully sign in");
-          form.reset();
-          navigate(location.state || "/");
+          if (user.emailVerified) {
+            showToast.success("Successfully sign in");
+            form.reset();
+            navigate(location.state || "/");
+          } else {
+            showToast.error(
+              "Your email is not verified. Please check your mailbox",
+            );
+          }
         }
       })
       .catch((error) => {

@@ -23,7 +23,7 @@ const Profile = () => {
               <div className="relative group">
                 <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl ring-4 ring-base-100 bg-base-100 shadow-xl overflow-hidden">
                   <img
-                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                    src={user?.photoURL}
                     alt="User Avatar"
                     className="w-full h-full object-cover"
                   />

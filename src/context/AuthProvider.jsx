@@ -2,9 +2,11 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
 import { AuthContext } from "./AuthContext";
@@ -19,6 +21,16 @@ const AuthProvider = ({ children }) => {
   // create user with email and password
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  // update user profile
+  const updateUserProfile = (user, info) => {
+    return updateProfile(user, info);
+  };
+
+  // email verification
+  const emailVerification = (user) => {
+    return sendEmailVerification(user);
   };
 
   // sign in user
@@ -50,6 +62,8 @@ const AuthProvider = ({ children }) => {
   const info = {
     createUser,
     signIn,
+    updateUserProfile,
+    emailVerification,
     signInWithGoogle,
     user,
     setUser,
